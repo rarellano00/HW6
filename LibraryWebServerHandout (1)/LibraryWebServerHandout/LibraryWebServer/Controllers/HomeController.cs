@@ -30,6 +30,7 @@ namespace LibraryWebServer.Controllers
     [HttpPost]
     public IActionResult CheckLogin(string name, int cardnum)
     {
+
       // TODO: Fill in. Determine if login is successful or not.
       bool loginSuccessful = false;
 
@@ -71,10 +72,9 @@ namespace LibraryWebServer.Controllers
     [HttpPost]
     public ActionResult AllTitles()
     {
+            // TODO: Implement
 
-      // TODO: Implement
-      
-      return Json(null);
+            return Json(null);
 
     }
 
