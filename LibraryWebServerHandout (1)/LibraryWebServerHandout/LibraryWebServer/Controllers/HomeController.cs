@@ -88,21 +88,23 @@ namespace LibraryWebServer.Controllers
         {
             using (Team3LibraryContext db = new Team3LibraryContext())
             {
+
                 var query =
-                    from i in db.Inventory
-                    join t in db.Titles
-                      on i.Isbn equals t.Isbn
-                    join co in db.CheckedOut
-                      on i.Serial equals co.Serial
-                    join p in db.Patrons
-                      on co.CardNum equals p.CardNum
+                  from t in db.Titles
+                  join i in db.Inventory on t.Isbn equals i.Isbn into join1
+                  from j1 in join1.DefaultIfEmpty()
+                  join c in db.CheckedOut on j1.Serial equals c.Serial into join2
+                  from j2 in join2.DefaultIfEmpty()
+                  join p in db.Patrons on j2.CardNum equals p.CardNum into join3
+                  from j3 in join3.DefaultIfEmpty()
                     select new
                     {
-                        isbn = i.Isbn,
-                        title = t.Title,
-                        author = t.Author,
-                        serial = i.Serial,
-                        name = p.Name
+                       isbn = t.Isbn,
+                       title = t.Title,
+                       author = t.Author,
+                       serial = j1 == null ? default(uint?) : j1.Serial,
+                       name = j3 == null ? String.Empty : j3.Name
+
                     };
                 return Json(query.ToArray());
 
